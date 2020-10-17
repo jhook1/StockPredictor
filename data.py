@@ -7,6 +7,7 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 analyzer = SentimentIntensityAnalyzer()
 
+# News Data is scraped from https://seekingalpha.com/symbol/<ticker>/analysis, Date Range from 01/31/2020 - 08/02/2020
 def get_stock(ticker):
     sentiments = {}
     ticker_data = yf.Ticker(ticker)
