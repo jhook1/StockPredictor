@@ -12,9 +12,10 @@ analyzer = SentimentIntensityAnalyzer()
 def get_stock(ticker, company, method = 'seeking alpha'):
     sentiments = {}
     ticker_data = yf.Ticker(ticker)
-    data = ticker_data.history(start = '2020-1-30', end = '2020-8-2')
+    data = ticker_data.history(start = '2019-9-01', end = '2020-10-05')
     data = data.drop(['Dividends', 'Stock Splits'], axis = 1)
     data = data.assign(Sentiment = 0)
+    data = data.assign(Change = 0)
     if(method == 'seeking alpha'):
         soup = BeautifulSoup(open('html/{}.txt'.format(ticker)), 'html.parser')
         articles = soup.find_all('article')
@@ -35,7 +36,7 @@ def get_stock(ticker, company, method = 'seeking alpha'):
     elif(method == 'gn'):
         googlenews = GoogleNews(start = '01/30/2020', end = '08/02/2020')
         googlenews.search(company)
-        for i in range(2, 6):
+        for i in range(2, 10):
             googlenews.getpage(i)
         results = googlenews.result()
         for result in results:
@@ -54,6 +55,9 @@ def get_stock(ticker, company, method = 'seeking alpha'):
         average_sentiment = np.average(sentiments[s])
         if(s in data.index):
             data.loc[s, 'Sentiment'] = average_sentiment
+    data['Change'] = data['Close'].shift(-1) - data['Close']
+    data['Change'] = data['Change'].shift(1)
+    data.iloc[0, 6] = 0
     data.to_csv('data/{}.csv'.format(ticker))
 
 if __name__ == '__main__':
