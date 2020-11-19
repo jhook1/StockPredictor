@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
+from collections import OrderedDict
 
 def genPlotModel(ticker):
     df = pd.read_csv('data/%s.csv'%ticker, sep = ',', header = 0)
@@ -35,7 +36,7 @@ def genPlotModel(ticker):
     lr.fit(x_train1, y_train)
 
     lr_confidence = lr.score(x_test1, y_test)
-    print("lr confidence: ", lr_confidence)
+    print("lr confidence for %s: "%ticker, lr_confidence)
 
     x_forecast = np.array(df.drop(['Date', 'Prediction'],1))[-1:]
     lr_prediction = lr.predict(x_forecast)
@@ -58,6 +59,39 @@ def genPlotModel(ticker):
     plt.close()
 
 if __name__ == '__main__':
+    dow_jones_dict = OrderedDict()
+    dow_jones_dict['aapl'] = 'Apple'
+    dow_jones_dict['amgn'] = 'Amgen'
+    dow_jones_dict['axp'] = 'American Express'
+    dow_jones_dict['ba'] = 'Bank of America'
+    dow_jones_dict['cat'] = 'Caterpillar Inc.'
+    dow_jones_dict['crm'] = 'Salesforce'
+    dow_jones_dict['csco'] = 'Cisco Systems'
+    dow_jones_dict['cvx'] = 'Chevron Corporation'
+    dow_jones_dict['dis'] = 'Disney'
+    dow_jones_dict['^dji'] = 'Dow Jones Index'
+    dow_jones_dict['dow'] = 'Dow Inc.'
+    dow_jones_dict['gs'] = 'Goldman Sachs'
+    dow_jones_dict['hd'] = 'The Home Depot'
+    dow_jones_dict['hon'] = 'Honeywell'
+    dow_jones_dict['ibm'] = 'IBM'
+    dow_jones_dict['intc'] = 'intel'
+    dow_jones_dict['jnj'] = 'Johnson & Johnson'
+    dow_jones_dict['jpm'] = 'JPMorgan Chase'
+    dow_jones_dict['ko'] = 'Coca-Cola'
+    dow_jones_dict['mcd'] = "McDonald's"
+    dow_jones_dict['mmm'] = '3M'
+    dow_jones_dict['mrk'] = 'Merck & Co.'
+    dow_jones_dict['msft'] = 'Microsoft'
+    dow_jones_dict['nke'] = 'Nike'
+    dow_jones_dict['pg'] = 'Procter & Gamble'
+    dow_jones_dict['trv'] = 'The Travelers Companies'
+    dow_jones_dict['unh'] = 'UnitedHealth Group'
+    dow_jones_dict['v'] = 'Visa'
+    dow_jones_dict['vz'] = 'Verizon'
+    dow_jones_dict['wba'] = 'Walgreens'
+    dow_jones_dict['wmt'] = 'Walmart'
+
     dow_jones_stocks = {
         'aapl' : 'Apple', 
         'amgn' : 'Amgen', 
@@ -92,5 +126,5 @@ if __name__ == '__main__':
         'wmt' : 'Walmart'
     }
 
-    for stock in list(dow_jones_stocks.keys()):
+    for stock in list(dow_jones_dict.keys()):
         genPlotModel(stock)

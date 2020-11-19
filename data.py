@@ -12,7 +12,7 @@ analyzer = SentimentIntensityAnalyzer()
 def get_stock(ticker, company, method = 'seeking alpha'):
     sentiments = {}
     ticker_data = yf.Ticker(ticker)
-    data = ticker_data.history(start = '2020-1-30', end = '2020-11-17')
+    data = ticker_data.history(start = '2020-1-30', end = '2020-11-16')
     data = data.drop(['Dividends', 'Stock Splits'], axis = 1)
     data = data.assign(Sentiment = 0)
     if(method == 'seeking alpha'):
@@ -33,7 +33,7 @@ def get_stock(ticker, company, method = 'seeking alpha'):
             else:
                 sentiments[article_date].append(headline_sentiment)
     elif(method == 'gn'):
-        googlenews = GoogleNews(start = '01/30/2020', end = '11/17/2020')
+        googlenews = GoogleNews(start = '01/30/2020', end = '11/16/2020')
         googlenews.search(company)
         for i in range(2, 6):
             googlenews.getpage(i)
