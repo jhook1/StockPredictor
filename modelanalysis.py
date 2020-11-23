@@ -37,7 +37,7 @@ def genPlotModel(ticker):
 
     lr = LinearRegression()
     lr.fit(x_train1, y_train)
-    dump(lr, 'models.joblib')
+    dump(lr, 'models/models_%s.joblib'%ticker)
 
     lr_confidence = lr.score(x_test1, y_test)
     print("lr confidence for %s: "%ticker, lr_confidence)
