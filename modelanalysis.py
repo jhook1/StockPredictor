@@ -6,11 +6,13 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 from collections import OrderedDict
+from joblib import dump, load 
 
 def genPlotModel(ticker):
     df = pd.read_csv('data/%s.csv'%ticker, sep = ',', header = 0)
 
     df.shape
+    """
     plt.figure(figsize=(16,8))
     plt.title('Close Price History')
     plt.plot(df['Close'])
@@ -18,6 +20,7 @@ def genPlotModel(ticker):
     plt.ylabel('Close Price USD ($)', fontsize=18)
     #plt.show()
     plt.close()
+    """
 
     X = np.array(df['Close'])
 
@@ -34,6 +37,7 @@ def genPlotModel(ticker):
 
     lr = LinearRegression()
     lr.fit(x_train1, y_train)
+    dump(lr, 'models.joblib')
 
     lr_confidence = lr.score(x_test1, y_test)
     print("lr confidence for %s: "%ticker, lr_confidence)
