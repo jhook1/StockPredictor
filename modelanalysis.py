@@ -50,6 +50,11 @@ def genPlotModel(ticker):
     train = x_train1
     valid = df.drop(['Date', 'Prediction'],1)[-n:]
     valid['Predictions'] = lr_prediction
+
+    df['lr_prediction']=df['Prediction']
+    df['lr_prediction'][-n:]=lr_prediction
+    df.to_csv('predictions/{}.csv'.format(ticker))
+
     plt.figure(figsize=(16,8))
     plt.title('Model')
     plt.xlabel('Date', fontsize=18)
