@@ -67,6 +67,8 @@ def genPlotModel(ticker):
     plt.savefig('figs/%s.png'%ticker)
     plt.close()
 
+    return lr_confidence
+
 if __name__ == '__main__':
     dow_jones_dict = OrderedDict()
     dow_jones_dict['aapl'] = 'Apple'
@@ -101,39 +103,12 @@ if __name__ == '__main__':
     dow_jones_dict['wba'] = 'Walgreens'
     dow_jones_dict['wmt'] = 'Walmart'
 
-    dow_jones_stocks = {
-        'aapl' : 'Apple', 
-        'amgn' : 'Amgen', 
-        'axp' : 'American Express', 
-        'ba' : 'Bank of America', 
-        'cat' : 'Caterpillar Inc', 
-        'crm' : 'Salesforce', 
-        'csco' : 'Cisco Systems',
-        'cvx' : 'Chevron Corporation', 
-        'dis' : 'Disney', 
-        '^dji' : 'Dow Jones Index',
-        'dow' : 'Dow Inc.', 
-        'gs' : 'Goldman Sachs', 
-        'hd' : 'The Home Depot', 
-        'hon' : 'Honeywell', 
-        'ibm' : 'IBM', 
-        'intc' : 'Intel',
-        'jnj' : 'Johnson & Johnson', 
-        'jpm' : 'JPMorgan Chase', 
-        'ko' : 'Coca-Cola', 
-        'mcd' : "McDonald's", 
-        'mmm' : '3M', 
-        'mrk' : 'Merck & Co.', 
-        'msft' : 'Microsoft', 
-        'nke' : 'Nike',
-        'pg' : 'Procter & Gamble', 
-        'trv' : 'The Travelers Companies', 
-        'unh' : 'UnitedHealth Group', 
-        'v' : 'Visa', 
-        'vz' : 'Verizon', 
-        'wba' : 'Walgreens', 
-        'wmt' : 'Walmart'
-    }
+    confTot=0
 
     for stock in list(dow_jones_dict.keys()):
-        genPlotModel(stock)
+        confCurr=genPlotModel(stock)
+        confTot+=confCurr
+    
+    confAvg=confTot/31
+
+    print("Average lr confidence is: ", confAvg)
