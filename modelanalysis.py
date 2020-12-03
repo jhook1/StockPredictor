@@ -12,7 +12,7 @@ from keras.models import Sequential
 from keras.layers import Dense, LSTM
 import math
 
-def genPlotModel(ticker):
+def genLRPlotModel(ticker):
     df = pd.read_csv('data/%s.csv'%ticker, sep = ',', header = 0)
 
     df.shape
@@ -30,7 +30,7 @@ def genPlotModel(ticker):
 
     y = np.array(df['Prediction'])
 
-    n=30 # number of days on which predictions are made
+    n = 30 # number of days on which predictions are made
 
     x_train1 = np.array(df.drop(['Date', 'Prediction'],1))[:-n]
     x_test1 = np.array(df.drop(['Date', 'Prediction'],1))[-n:]
@@ -70,9 +70,11 @@ def genPlotModel(ticker):
 
     plt.savefig('figs/%s.png'%ticker)
     plt.close()
+
+    return lr_confidence
     
     ################################### - LSTM - ##################################################
-
+def trainLSTM(ticker):
     #Create a new Dataframe
     data = df['Close']
     # print(type(data))
@@ -108,14 +110,15 @@ def genPlotModel(ticker):
     #Build the LSTM model
     model = Sequential()
     # 50 neurons, (timesteps, features)
-    model.add(LSTM(50, return_sequences=True, input_shape = (x_train.shape[1], 1)))
-    model.add(LSTM(50, return_sequences=False))
+    model.add(LSTM(50, return_sequences = True, input_shape = (x_train.shape[1], 1)))
+    model.add(LSTM(50, return_sequences = True))
+    model.add(LSTM(50))
     model.add(Dense(25))
     model.add(Dense(1))
 
     model.compile(optimizer='adam', loss ='mean_squared_error')
 
-    model.fit(x_train, y_train, batch_size = 1, epochs=1)
+    model.fit(x_train, y_train, batch_size = 1, epochs = 4)
 
     #Create the testing dataset
     #Create a new array containing scaled values from index size-n to size
@@ -148,8 +151,8 @@ def genPlotModel(ticker):
 
     ################################### - LSTM - ##################################################
 
-
-    return lr_confidence
+def plotLSTM(ticker):
+    pass
 
 if __name__ == '__main__':
     dow_jones_dict = OrderedDict()
@@ -185,12 +188,13 @@ if __name__ == '__main__':
     dow_jones_dict['wba'] = 'Walgreens'
     dow_jones_dict['wmt'] = 'Walmart'
 
-    confTot=0
+    confTot = 0
 
     for stock in list(dow_jones_dict.keys()):
-        confCurr=genPlotModel(stock)
-        confTot+=confCurr
+        confCurr = genLRPlotModel(stock)
+        trainLSTM(stock)
+        confTot += confCurr
     
-    confAvg=confTot/31
+    confAvg = confTot / 31
 
     print("Average lr confidence is: ", confAvg)
