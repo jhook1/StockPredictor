@@ -29,6 +29,7 @@ while(True):
 
         # Get index of specified date and print close price for that day
         current_row=df.loc[df['Date'] == date]
+        print(current_row)
         index=current_row.index.tolist()
         x_forecast = np.array(current_row.drop(['Date', 'Prediction'],1))
         print('\nPrice for %s'%date,':',x_forecast[0][3])
@@ -55,7 +56,7 @@ while(True):
 
         # Pull stock data for ticker
         df = web.DataReader(ticker, data_source = 'yahoo', start = '2015-01-01', end = '2020-10-01')
-        data=df['Close']
+        data=df['Adj Close']
 
         # Reshape data 
         dataset = np.array(data.values)
@@ -77,7 +78,7 @@ while(True):
 
         # Get row for specified data and print close price
         x_forecast = np.array(current_row.drop(['Date'],1))
-        print('\nPrice for %s'%date,':',x_forecast[0][3])
+        print('\nPrice for %s'%date,':',x_forecast[0][5])
 
         # Predict close price for next day
         lstm_prediction = lstm.predict(train_data)
@@ -86,10 +87,10 @@ while(True):
 
         # Get actual next day price
         actual=df.iloc[index[0]+1]
-        print('Actual Price for 1 day out:',actual['Close'],'\n')
+        print('Actual Price for 1 day out:',actual['Adj Close'],'\n')
 
         # Display figure
-        webbrowser.open('lstmfigs/%s.png'%ticker)
+        webbrowser.open('lstm_figs/%s.png'%ticker)
 
     elif (modelType == '3'):
         break

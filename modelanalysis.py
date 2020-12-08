@@ -250,13 +250,13 @@ if __name__ == '__main__':
 
     confTot = 0
 
-    plotLSTM('aapl')
+    """ plotLSTM('aapl')
     plotLSTM('msft')
-    plotLSTM('v')
-    #for stock in list(dow_jones_dict.keys()):
-    #    confCurr = genLRPlotModel(stock)
-    #    trainLSTM(stock)
-    #    confTot += confCurr
+    plotLSTM('v') """
+    for stock in list(dow_jones_dict.keys()):
+        confCurr = genLRPlotModel(stock)
+        #trainLSTM(stock)
+        confTot += confCurr
     
     #confAvg = confTot / 31
 
