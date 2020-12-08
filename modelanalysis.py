@@ -14,8 +14,6 @@ from keras.models import Sequential, load_model
 from keras.layers import Dense, LSTM
 import math
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
 def genLRPlotModel(ticker):
     df = pd.read_csv('data/%s.csv'%ticker, sep = ',', header = 0)
 
@@ -69,8 +67,8 @@ def genLRPlotModel(ticker):
 ################################### - LSTM - ##################################################
 def trainLSTM(ticker):
     #Create a new Dataframe
-    df = pandas_datareader.DataReader('V', data_source = 'yahoo', start = '2015-01-01', end = '2020-10-01')
-    data = df[['Close']]
+    df = pandas_datareader.DataReader(ticker, data_source = 'yahoo', start = '2015-01-01', end = '2020-10-01')
+    data = df[['Adj Close']]
     n = 60
 
     #Convert to numpy array
@@ -149,7 +147,7 @@ def plotLSTM(ticker):
     #Create a new Dataframe
     n = 60
     df = pandas_datareader.DataReader(ticker, data_source = 'yahoo', start = '2015-01-01', end = '2020-10-01')
-    data = df[['Close']]
+    data = df[['Adj Close']]
 
     dataset = np.array(data.values)
     dataset = np.reshape(dataset, (-1, 1))
@@ -189,25 +187,15 @@ def plotLSTM(ticker):
 
     train = data[:training_data_len]
     valid = data[training_data_len:]
-    #train = data.loc[:'2020-09-01']
-    #valid = data.loc['2020-09-01':]
-    #print(data.loc[:'2020-09-01'])
     valid['Predictions'] = predictions
-    #print(type(train))
-    #print(type(valid))
-    #predictions_series = []
-    #indices = list(range(162, 202))
-    #for prediction in predictions:
-    #    predictions_series.append(prediction)
-    #predictions = pd.Series(predictions_series, index = indices)
 
     # Visulaize the date
     plt.figure(figsize=(16,8))
     plt.title(ticker.upper())
     plt.xlabel('Date', fontsize=12)
     plt.ylabel('Closing Price USD ($)', fontsize=12)
-    plt.plot(train['Close'])
-    plt.plot(valid['Close'])
+    plt.plot(train['Adj Close'])
+    plt.plot(valid['Adj Close'])
     plt.plot(valid['Predictions'])
     plt.legend(['Train', 'Actual', 'Predictions'], loc='lower right')
     plt.savefig('lstm_figs/' + ticker + '.png')
