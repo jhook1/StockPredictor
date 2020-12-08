@@ -11,7 +11,7 @@ import webbrowser
 
 while(True):
     #Print menu and get ticker/date inputs
-    print('Welcome to the Stock Predictor App. Please follow Instructions')
+    print('Welcome to the Stock Predictor App. Please Follow Instructions:')
     print('1. Linear Regression Model ')
     print('2. LSTM Model ')
     print('3. Exit ')
@@ -27,14 +27,14 @@ while(True):
 
         # Get index of specified date and print close price for that day
         current_row=df.loc[df['Date'] == date]
-        print(current_row)
+        #print(current_row)
         index=current_row.index.tolist()
         x_forecast = np.array(current_row.drop(['Date', 'Prediction'],1))
         print('\nPrice for %s'%date,':',x_forecast[0][3])
 
         # Predict close price of next day
         lr_prediction = lr.predict(x_forecast)
-        print('Prediction for the 1 day out:', lr_prediction[0])
+        print('Prediction for 1 day out:', lr_prediction[0])
 
         # Get actual next day price
         actual=df.iloc[index[0]+1]
@@ -46,7 +46,7 @@ while(True):
 
     elif(modelType == '2'):
         ticker = str(input ("Enter Stock Ticker Name: "))
-        date=str(input ("Enter Date before 2020-10-01 (yyyy-mm-dd): "))
+        date=str(input ("Enter Date Before 2020-10-01 (yyyy-mm-dd): "))
 
         # LSTM
         # Load in LSTM model
@@ -81,7 +81,7 @@ while(True):
         # Predict close price for next day
         lstm_prediction = lstm.predict(train_data)
         lstm_prediction = scaler.inverse_transform(lstm_prediction)
-        print('Prediction for the 1 day out:', lstm_prediction[0][0])
+        print('Prediction for 1 day out:', lstm_prediction[0][0])
 
         # Get actual next day price
         actual=df.iloc[index[0]+1]
@@ -94,4 +94,4 @@ while(True):
         break
 
     else:
-        print('Incorrect Input. Please enter a number 1-3.\n')
+        print('Incorrect Input. Please Enter a Number 1-3.\n')
