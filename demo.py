@@ -9,8 +9,6 @@ from keras.models import Sequential, load_model
 from keras.layers import Dense, LSTM
 import webbrowser
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
 while(True):
     #Print menu and get ticker/date inputs
     print('Welcome to the Stock Predictor App. Please follow Instructions')
@@ -89,7 +87,7 @@ while(True):
         print('Actual Price for 1 day out:',actual['Close'],'\n')
 
         # Display figure
-        webbrowser.open('lstmfigs/%s.png'%ticker)
+        webbrowser.open('lstm_figs/%s.png'%ticker)
 
     elif (modelType == '3'):
         break
