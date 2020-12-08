@@ -1,6 +1,7 @@
 from joblib import dump, load
 import pandas as pd
 import numpy as np
+import os
 import pandas_datareader as web
 import math
 from sklearn.preprocessing import MinMaxScaler
@@ -8,6 +9,7 @@ from keras.models import Sequential, load_model
 from keras.layers import Dense, LSTM
 import webbrowser
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 while(True):
     #Print menu and get ticker/date inputs
@@ -67,11 +69,11 @@ while(True):
         index=current_row.index.tolist()
 
         # Get training data from scaled
-        train_data=scaled_data[index[0]-60:index[0]]
-        train_data = np.array(train_data)
-
+        train_data = scaled_data[index[0]-60:index[0]]
+        #train_data = np.array(train_data)
+        train_data = np.array([train_data])
         # Reshape training data
-        np.reshape(train_data, (1, 60, 1))
+        #np.reshape(train_data, shape = (1, 60, 1))
 
         # Get row for specified data and print close price
         x_forecast = np.array(current_row.drop(['Date'],1))
@@ -79,7 +81,8 @@ while(True):
 
         # Predict close price for next day
         lstm_prediction = lstm.predict(train_data)
-        print('Prediction for the 1 day out:', lstm_prediction[0])
+        lstm_prediction = scaler.inverse_transform(lstm_prediction)
+        print('Prediction for the 1 day out:', lstm_prediction[0][0])
 
         # Get actual next day price
         actual=df.iloc[index[0]+1]
