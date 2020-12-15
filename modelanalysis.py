@@ -141,6 +141,8 @@ def trainLSTM(ticker):
     rmse = np.sqrt(np.mean(predictions - y_test) ** 2)
     print("LSTM RMSE for %s: "%ticker, rmse)
 
+    return rmse
+
     ################################### - LSTM - ##################################################
 
 def plotLSTM(ticker):
@@ -199,6 +201,7 @@ def plotLSTM(ticker):
     plt.plot(valid['Predictions'])
     plt.legend(['Train', 'Actual', 'Predictions'], loc='lower right')
     plt.savefig('lstm_figs/' + ticker + '.png')
+    plt.close()
     #plt.show()
 
 
@@ -213,7 +216,7 @@ if __name__ == '__main__':
     dow_jones_dict['csco'] = 'Cisco Systems'
     dow_jones_dict['cvx'] = 'Chevron Corporation'
     dow_jones_dict['dis'] = 'Disney'
-    dow_jones_dict['^dji'] = 'Dow Jones Index'
+    #dow_jones_dict['^dji'] = 'Dow Jones Index'
     dow_jones_dict['dow'] = 'Dow Inc.'
     dow_jones_dict['gs'] = 'Goldman Sachs'
     dow_jones_dict['hd'] = 'The Home Depot'
@@ -237,15 +240,20 @@ if __name__ == '__main__':
     dow_jones_dict['wmt'] = 'Walmart'
 
     confTot = 0
+    rmseTot = 0
 
-    plotLSTM('aapl')
+    """ plotLSTM('aapl')
     plotLSTM('msft')
-    plotLSTM('v')
-    #for stock in list(dow_jones_dict.keys()):
-    #    confCurr = genLRPlotModel(stock)
-        #trainLSTM(stock)
-    #    confTot += confCurr
+    plotLSTM('v') """
+    for stock in list(dow_jones_dict.keys()):
+       confCurr = genLRPlotModel(stock)
+       rmseCurr = trainLSTM(stock)
+       plotLSTM(stock)
+       confTot += confCurr
+       rmseTot += rmseCurr
     
-    #confAvg = confTot / 31
+    confAvg = confTot / 30
+    rmseAvg = rmseTot / 30
 
-    #print("Average lr confidence is: ", confAvg)
+    print("Average lr confidence is: ", confAvg)
+    print("Average LSTM rmse is: ", rmseAvg)
